@@ -9,10 +9,20 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 
-public class Main {
+public class gamr {
   static String[] arguments;
   static Map<Integer, String> map = new HashMap<>();
   static int userMove;
+
+  public static boolean isArgsUnique(String[] args) {
+    Set<String> set = new HashSet<>();
+    for (String s : args) {
+      if (!set.add(s)) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   public static void menu() {
     System.out.println("Available moves: ");
@@ -64,19 +74,25 @@ public class Main {
       }
     }
     if (mapa.get(pcMove)) {
-      System.out.println("You lose!");
+      System.out.println("You win!");
     }
     else {
-      System.out.println("You win!");
+      System.out.println("You lose!");
     }
   }
 
   public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
+
+    if (!isArgsUnique(args)) {
+      System.out.println("You enter duplicates!");
+      return;
+    }
+
     arguments = args;
     if(args.length >= 3 && !(args.length % 2 == 0)){
       System.out.println("HMAC:");
       GenerateHMAC hmacAndKey = new GenerateHMAC(args);
-      System.out.println(hmacAndKey.bytesToHex(hmacAndKey.generateHMAC()));
+      System.out.println(hmacAndKey.bytesToHex(hmacAndKey.generateHMAC()).toUpperCase());
       menu();
       if (userMove == 0) {
         return;
